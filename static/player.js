@@ -80,3 +80,24 @@ function formatTime(seconds) {
     const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
     return `${mins}:${secs}`;
 }
+
+let localSongs = [];
+
+function addLocalSongs() {
+    const input = document.getElementById('localFile');
+    const files = Array.from(input.files);
+
+    files.forEach(file => {
+        const url = URL.createObjectURL(file);
+        localSongs.push({ name: file.name, url: url });
+        const option = new Option(file.name, url);
+        songList.appendChild(option);
+    });
+
+    // Optional: auto-select first added song
+    if (files.length > 0) {
+        songList.value = localSongs[0].url;
+        audioPlayer.src = localSongs[0].url;
+        audioPlayer.play();
+    }
+}
