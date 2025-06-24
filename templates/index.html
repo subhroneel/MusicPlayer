@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Music Player</title>
+    <style>
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+
+        select {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #volumeValue {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>🎶 Web Music Player</h2>
+
+    <!-- Hidden audio player -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <!-- Song List -->
+    <select id="songList" size="10" onchange="selectSong(this)">
+        {% for song in songs %}
+            <option value="{{ song }}">{{ loop.index }}. {{ song }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Seek bar -->
+    <input type="range" id="seekBar" min="0" value="0" step="1">
+    <div>
+        Time: <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+    </div>
+
+    <!-- Volume slider -->
+    <label for="volumeSlider">Volume: <span id="volumeValue">100%</span></label>
+    <input type="range" id="volumeSlider" min="0" max="100" value="100">
+
+    <!-- Controls -->
+    <div>
+        <button onclick="prevSong()">⏮ Previous</button>
+        <button onclick="startSong()">▶ Start</button>
+        <button onclick="pauseSong()">⏸ Pause</button>
+        <button onclick="stopSong()">⏹ Stop</button>
+        <button onclick="nextSong()">⏭ Next</button>
+    </div>
+
+    <script>
+        const playlist = {{ songs|tojson }};
+    </script>
+    <script src="/static/player.js"></script>
+</body>
+</html>
