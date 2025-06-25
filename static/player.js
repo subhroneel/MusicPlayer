@@ -234,7 +234,7 @@ function addLocalSongs() {
             console.log("Added song object to playlist:", songObject);
 
             // Add to the select list
-            const option = new Option(file.name, url); // Use URL as the option value
+            const option = new Option(window.playlist.length + ". " + file.name, url); // Use URL as the option value
             songList.appendChild(option);
             console.log("Appended option to song list for:", file.name);
 
