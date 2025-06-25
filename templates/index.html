@@ -32,9 +32,10 @@
     <audio id="audioPlayer" style="display: none;"></audio>
 
     <!-- Song List -->
-    <select id="songList" size="10" onchange="selectSong(this)">
+    <select id="songList" size="10">
         {% for song in songs %}
-            <option value="{{ song }}">{{ loop.index }}. {{ song }}</option>
+            {# Change the value to the full URL #}
+            <option value="/music/{{ song }}">{{ loop.index }}. {{ song }}</option>
         {% endfor %}
     </select>
 
@@ -57,10 +58,30 @@
         <button onclick="nextSong()">⏭ Next</button>
         <input type="file" id="localFile" accept=".mp3" multiple>
         <button onclick="addLocalSongs()">➕ Add Songs (Local)</button>
+        <button onclick="removeSong()">🗑 Remove Selected</button>
     </div>
 
+    {# Initialize playlist data here BEFORE player.js loads #}
     <script>
-        const playlist = {{ songs|tojson }};
+        // Declare playlist globally or attach to window so player.js can access it
+        // Populate it with the initial server songs using their URL and name
+        window.playlist = [];
+        const initialSongs = {{ songs | tojson }}; // Assume 'songs' is a Python list available via Jinja
+        initialSongs.forEach(songName => {
+            window.playlist.push({ name: songName, url: "/music/" + songName });
+        });
+
+        // Optional: console log the initial playlist for debugging
+        console.log("Initial playlist:", window.playlist);
+
+        // Add event listener for select change after initial load
+        document.getElementById('songList').addEventListener('change', function() {
+            selectSong(this);
+        });
+
+         // Add event listener for local file input change
+//        document.getElementById('localFile').addEventListener('change', addLocalSongs);
+
     </script>
     <script src="/static/player.js"></script>
 </body>
